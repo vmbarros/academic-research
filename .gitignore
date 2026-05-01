@@ -1,0 +1,91 @@
+# =============================================================================
+# Sistema operacional
+# =============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# =============================================================================
+# Obsidian — estado local da interface
+# -----------------------------------------------------------------------------
+# Mantém versionado: app.json, appearance.json, core-plugins.json,
+# community-plugins.json, hotkeys.json, graph.json — são config do vault.
+# Ignora apenas estado de UI por máquina e dados locais de plugins.
+# =============================================================================
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/workspaces.json
+.obsidian/cache
+.obsidian/plugins/*/data.json
+.trash/
+
+# =============================================================================
+# Claude Code — configurações locais por máquina
+# -----------------------------------------------------------------------------
+# Mantém versionado: .claude/agents/, .claude/skills/, .claude/commands/,
+# .claude/settings.json — são o sistema metodológico compartilhado.
+# Ignora apenas overrides locais e credenciais.
+# =============================================================================
+.claude/settings.local.json
+.claude/.credentials.json
+.claude/state/
+.claude/cache/
+
+# =============================================================================
+# Corpus — PDFs e binários acadêmicos
+# -----------------------------------------------------------------------------
+# PDFs são lidos UMA vez na indexação. O conteúdo operacional vive nas fichas
+# em corpus/indice/. Não versionar PDFs evita: (a) violação de copyright em
+# repositório público, (b) inflação do repo com binários grandes, (c)
+# poluição do diff. Mantém .gitkeep e qualquer .md (notas alongside).
+# =============================================================================
+projects/*/corpus/papers/*
+!projects/*/corpus/papers/.gitkeep
+!projects/*/corpus/papers/*.md
+!projects/*/corpus/papers/README.md
+
+# =============================================================================
+# Editores e IDEs
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+
+# =============================================================================
+# Arquivos temporários e backups
+# =============================================================================
+*.tmp
+*.bak
+*.orig
+*.rej
+~$*
+
+# =============================================================================
+# Logs
+# =============================================================================
+*.log
+logs/
+
+# =============================================================================
+# Python (para scripts auxiliares de _meta/, se vierem a existir)
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.pytest_cache/
+
+# =============================================================================
+# Node (idem)
+# =============================================================================
+node_modules/
+.npm
