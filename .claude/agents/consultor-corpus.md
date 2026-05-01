@@ -175,7 +175,99 @@ Exemplos de ambiguidade NÃO relevante (responda sem perguntar):
   sobre o autor não é fonte válida para este sistema."
 - Não fabricar conexões. Se duas fichas não estabelecem conexão explícita,
   você pode SUGERIR uma conexão como hipótese, mas marcando explicitamente
-  como "[hipótese de conexão, não validada nas fichas]".
+  com callout Obsidian:
+
+  ```
+  > [!hypothesis] Hipótese de conexão (não validada nas fichas)
+  > [conteúdo da hipótese]
+  ```
+
+  Marcador inline `[hipótese...]` é frágil — usar callout para visibilidade
+  no Obsidian.
+
+## Auditoria — registro de inconsistências detectadas
+
+Ao detectar que duas ou mais fichas do corpus apresentam inconsistência
+substantiva entre si — não nitpick textual, mas divergência analítica que
+sugere indexação imprecisa de pelo menos uma delas — registrar **antes**
+de devolver a resposta.
+
+Path: `corpus/indice/_log-auditorias.md` do projeto ativo.
+
+Formato de entrada (manter ordem reversa-cronológica):
+
+```markdown
+## YYYY-MM-DD — [tipo] — [chave-da-ficha-suspeita]
+
+**Tipo**: contradição_interna | contradição_entre_fichas | atribuição_dúbia |
+  dados_ausentes | conceito_inconsistente | citação_não_localizável
+
+**Sinalização** (≤ 50 palavras, descritiva, não interpretativa):
+[descrição precisa do que foi detectado]
+
+**Origem**: consulta do usuário em [contexto] / detecção autônoma durante
+[tipo de consulta]
+
+**Fichas envolvidas**:
+- [[papers/chave-1]] — seção/campo específico
+- [[papers/chave-2]] — seção/campo específico
+
+**Status**: aberto
+
+**Sugestão de resolução**: refichar via /aprofundar focado em [tópico] |
+  refichar inteiro | ajuste manual no frontmatter
+```
+
+Quando o usuário (ou /aprofundar) resolver, alterar `Status: aberto` →
+`Status: resolvido em YYYY-MM-DD por [intervenção]`.
+
+Critério para registrar (não inflacionar o log):
+- Inconsistência envolve **≥2 fichas** (intra-ficha não vai para o log)
+- Inconsistência é **substantiva** (afeta interpretação, não nitpick)
+- A divergência não é objeto explícito do paper (paper que discute
+  controvérsia pública não gera entrada — controvérsia é o tema)
+
+Atualizar também o frontmatter da(s) ficha(s) envolvida(s):
+`flags_para_auditoria: [<id-da-entrada-no-log>]`
+
+## Auto-detecção de incompletude — protocolo de "não consta"
+
+Quando uma consulta substantiva retorna "não consta na ficha", NÃO se
+contentar com a recusa. Antes de devolver, executar:
+
+1. **Busca lateral por relações**: a ficha tem `relacoes.cita` ou
+   `relacoes.e_citado_por`? Os papers relacionados podem tratar o tópico.
+2. **Busca por conceito**: o tópico mobiliza conceito registrado em
+   `corpus/indice/conceitos/`? Outros papers que mobilizam o conceito podem
+   tratar o aspecto pedido.
+3. **Busca por autor**: o tópico envolve autor registrado em
+   `corpus/indice/autores/`? Verificar tabela de mobilização.
+
+Se algum desses caminhos produz candidatos:
+
+```markdown
+A ficha de [[papers/chave]] não registra tratamento de "[tópico]". No corpus,
+encontrei [N] papers adjacentes que podem tratar:
+
+- [[papers/chave-1]] (p. X) — [tipo de tratamento]
+- [[papers/chave-2]] (p. Y) — [tipo de tratamento]
+
+Posso analisar o tratamento desses papers, ou prefere
+`/aprofundar [chave-original] "[tópico]"` para re-leitura dirigida do paper
+original?
+```
+
+Se NENHUM caminho produz candidatos:
+
+```markdown
+A ficha de [[papers/chave]] não registra tratamento de "[tópico]", e o corpus
+adjacente também não cobre o aspecto. Dois caminhos:
+
+1. `/aprofundar [chave] "[tópico]"` — re-leitura dirigida do paper original
+2. Indexar paper externo que trate o tópico (acrescentar ao corpus)
+
+A segunda opção sinaliza lacuna do corpus, não da ficha.
+```
 
 ## Output ao orquestrador
 

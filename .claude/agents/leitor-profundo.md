@@ -33,7 +33,23 @@ argumentativa estão definidos em `.claude/skills/indexacao-paper/SKILL.md`.
 **Sempre consultar essa skill antes de gerar a ficha.** Esta página define
 apenas o protocolo operacional do agente; o contrato de forma vive na skill.
 
-## Protocolo de execução
+## Modos de operação
+
+O agente opera em dois modos, declarados pelo orquestrador na invocação:
+
+- **INTEGRAL** (default): fichamento completo de paper novo. Lê o PDF inteiro,
+  produz ficha mestra (e subfichas, se obra grande), atualiza esqueletos,
+  bidirecionalidade, _index.md.
+- **APROFUNDAMENTO**: re-leitura dirigida de paper já indexado, focada em
+  tópico específico. Lê APENAS as seções/capítulos onde o tópico aparece;
+  ADICIONA conteúdo (não reescreve); marca tudo com callout
+  `> [!aprofundamento]` para audit trail. Ver protocolo no comando
+  `/aprofundar`.
+
+O restante deste documento descreve o modo INTEGRAL. Modo APROFUNDAMENTO segue
+as mesmas regras de qualidade, mas com escopo restrito ao tópico solicitado.
+
+## Protocolo de execução (modo INTEGRAL)
 
 ### 1. Leitura integral
 

@@ -68,6 +68,8 @@ projects/[slug]/
 │   └── indice/
 │       ├── _index.md             (Camada 0 — vazio inicialmente)
 │       ├── _master.md            (entrada navegável Dataview)
+│       ├── _log-auditorias.md    (registro de inconsistências detectadas)
+│       ├── _log-aprofundamentos.md (registro de invocações de /aprofundar)
 │       ├── papers/.gitkeep
 │       ├── conceitos/
 │       │   ├── [slug-1].md       (esqueleto, nome = slug ASCII)
@@ -178,6 +180,42 @@ Mantido automaticamente pelo `@leitor-profundo`. Cabeçalho fixo:
 |---|---|---|---|---|---|
 
 *Sem entradas. Será preenchido conforme papers forem indexados.*
+```
+
+### `corpus/indice/_log-auditorias.md`
+
+Mantido pelo `@consultor-corpus`. Cabeçalho fixo:
+
+```markdown
+# Log de auditorias — [Nome do projeto]
+
+> Registro de inconsistências detectadas pelo `@consultor-corpus` durante
+> consultas. Cada entrada envolve ≥2 fichas e divergência substantiva (não
+> nitpick). Ordem reversa-cronológica (mais recente no topo).
+>
+> Convenção de status: `aberto` | `em-investigação` | `resolvido em YYYY-MM-DD por [intervenção]`
+
+---
+
+*Sem entradas. Será preenchido conforme o consultor detecta divergências.*
+```
+
+### `corpus/indice/_log-aprofundamentos.md`
+
+Mantido pelo `@leitor-profundo` em modo APROFUNDAMENTO. Cabeçalho fixo:
+
+```markdown
+# Log de aprofundamentos — [Nome do projeto]
+
+> Registro de invocações de `/aprofundar`: paper alvo, tópico, páginas
+> relidas, conteúdo adicionado, data. Ordem reversa-cronológica.
+>
+> Útil para reconstruir trajetória de refinamento da ficha sem ter que
+> diff-ar versões.
+
+---
+
+*Sem entradas. Será preenchido a cada invocação de `/aprofundar`.*
 ```
 
 ### `corpus/indice/_master.md`
