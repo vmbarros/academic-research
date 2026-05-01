@@ -4,7 +4,7 @@ description: Localiza trecho específico no corpus indexado. Aceita combinação
   @consultor-corpus para fazer grep nas fichas e devolver localizações exatas
   com paper, página e citação contextual. Use quando precisa achar rapidamente
   "onde foi mesmo que [autor] disse X".
-argument-hint: [autor + tema | expressão | conceito + autor]
+argument-hint: [autor + tema | expressão | conceito + autor] [--projeto slug]
 ---
 
 # Localização de trecho
@@ -13,7 +13,12 @@ Você vai localizar um trecho específico no corpus. Protocolo:
 
 ## 1. Análise da consulta
 
-Receber consulta em `$ARGUMENTS`. Identificar componentes:
+Identificar projeto ativo conforme hierarquia em CLAUDE.md (seção
+"Identificação do projeto ativo"): `--projeto [slug]` se fornecido em
+`$ARGUMENTS`, senão inferir por cwd, senão perguntar.
+
+Receber consulta em `$ARGUMENTS` (descontando `--projeto [slug]` se
+presente). Identificar componentes:
 
 - Autor mencionado? (nome próprio)
 - Conceito ou termo técnico?

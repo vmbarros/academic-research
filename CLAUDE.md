@@ -220,10 +220,59 @@ operar consulta complexa ou indexação de obra grande.**
 
 - Criar projeto novo → comando `/novo-projeto`
 - Indexar paper novo → comando `/indexa` (invoca @leitor-profundo)
+- Aprofundar ficha existente em tópico específico → comando `/aprofundar`
 - Buscar conceito ou autor → comando `/busca` (invoca @consultor-corpus)
 - Localizar trecho → comando `/trecho`
 - Gerar mapa de tema → comando `/mapa` (ativa skill mapeamento-conceitual)
 - Consulta cruzada complexa → invocar @consultor-corpus diretamente
+
+## Identificação do projeto ativo
+
+Toda operação opera sobre **um projeto**. A identificação é hierárquica:
+
+1. Se o comando recebeu `--projeto [slug]`, usar esse.
+2. Se não, e a cwd está dentro de `projects/[slug]/`, o projeto ativo é o
+   pai imediato.
+3. Se cwd está na raiz do vault ou ambígua, listar `projects/*/PROJECT.md`
+   e perguntar.
+
+Todos os comandos (`/novo-projeto`, `/indexa`, `/aprofundar`, `/busca`,
+`/mapa`, `/trecho`) aceitam `--projeto [slug]` opcional. Útil quando:
+
+- Você opera múltiplos projetos em paralelo de terminais distintos
+- Você invoca Claude Code da raiz do vault para fazer consulta cruzada
+- Automação (cron, hook) dispara comando sem cwd dentro do projeto
+
+Sintaxe: `--projeto` pode aparecer em qualquer posição entre os argumentos
+do comando.
+
+## Convenção de wiki links
+
+Wiki links no Obsidian são strings que o LLM precisa resolver em path. Para
+desambiguar resolução, convenção:
+
+**Dentro de uma ficha** (qualquer arquivo em `corpus/indice/`): links são
+**relativos a `corpus/indice/`** do projeto que contém a ficha.
+
+```markdown
+[[autores/habermas-jurgen]]                       # correto
+[[papers/ayres-1992-responsive]]                  # correto
+[[conceitos/regulacao-responsiva]]                # correto
+[[habermas-1992-faktizitat/cap-02-fato-validade]] # correto (subficha)
+```
+
+**Em mensagem do consultor ao usuário**: idem (relativo a `corpus/indice/`
+do projeto ativo).
+
+**Cruzando projetos** (raro): path absoluto a partir da raiz do vault.
+
+```markdown
+[[projects/tese-data-centers/corpus/indice/papers/ayres-1992-responsive]]
+```
+
+**Resolução determinística**: cada ficha tem `caminho_canonico` no
+frontmatter (path absoluto desde a raiz do vault). Em caso de ambiguidade,
+o LLM usa esse campo em vez de inferir.
 
 ## Ambiente de trabalho
 

@@ -4,7 +4,7 @@ description: Cria um novo projeto de pesquisa em projects/ com estrutura padrão
   pesquisa, conceitos-chave, autores-âncora) e gera a árvore completa de pastas,
   PROJECT.md preenchido, e _master.md inicial do índice. Use quando iniciar nova
   pesquisa: tese, dissertação, artigo, capítulo, parecer, seminário ou curso.
-argument-hint: [slug-do-projeto-opcional]
+argument-hint: [slug-do-projeto-opcional] [--projeto não se aplica aqui — este comando CRIA o projeto]
 ---
 
 # Criação de novo projeto de pesquisa

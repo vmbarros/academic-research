@@ -3,7 +3,7 @@ description: Busca temática no corpus indexado. Aceita conceito, autor, express
   ou questão. Invoca @consultor-corpus para consultar o índice estruturado e
   responder com base nas fichas, sem reabrir PDFs originais. Use para localizar
   rapidamente como um conceito ou autor aparece no corpus.
-argument-hint: [conceito | autor | expressão de busca]
+argument-hint: [conceito | autor | expressão de busca] [--projeto slug]
 ---
 
 # Busca no corpus
@@ -13,8 +13,11 @@ Protocolo:
 
 ## 1. Identificação do projeto e do alvo
 
-1. Identificar o projeto ativo conforme regras do CLAUDE.md
-2. Receber o termo de busca em `$ARGUMENTS`
+1. Identificar o projeto ativo conforme hierarquia em CLAUDE.md (seção
+   "Identificação do projeto ativo"): `--projeto [slug]` se fornecido em
+   `$ARGUMENTS`, senão inferir por cwd, senão perguntar.
+2. Receber o termo de busca em `$ARGUMENTS` (descontando `--projeto [slug]`
+   se presente)
 3. Classificar o tipo de busca:
    - **Conceito**: termo nominal técnico (ex.: "barganha regulatória",
      "regulação responsiva", "função social")

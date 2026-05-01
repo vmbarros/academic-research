@@ -4,7 +4,7 @@ description: Re-leitura dirigida de paper já indexado, focada em tópico espec�
   refichamento focado, que LÊ o PDF buscando o tópico e ADICIONA ao índice (não
   reescreve a ficha mestra). Resultado é cumulativo. Use quando @consultor-corpus
   responde "esta informação não está na ficha" mas você sabe que está no paper.
-argument-hint: [chave-do-paper] [tópico entre aspas]
+argument-hint: [chave-do-paper] [tópico entre aspas] [--projeto slug]
 ---
 
 # Aprofundamento dirigido de ficha
@@ -15,8 +15,9 @@ substituição.
 
 ## 1. Identificação do projeto, paper e tópico
 
-1. Identificar o projeto ativo conforme regras do CLAUDE.md (cwd, ou
-   `--projeto [slug]` se fornecido).
+1. Identificar o projeto ativo conforme hierarquia em CLAUDE.md (seção
+   "Identificação do projeto ativo"): `--projeto [slug]` se fornecido em
+   `$ARGUMENTS`, senão inferir por cwd, senão perguntar.
 2. Receber em `$ARGUMENTS`: `[chave-do-paper] [tópico entre aspas]`
 3. Validar:
    - A ficha existe? Localizar `corpus/indice/papers/[chave].md` (paper único)

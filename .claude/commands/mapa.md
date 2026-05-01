@@ -4,7 +4,7 @@ description: Gera mapa conceitual sobre um tema do corpus, ativando a skill
   de múltiplas fichas. Produz mapa salvo em corpus/indice/mapas/. Use antes de
   escrever capítulo/seção que dialoga com literatura específica, para identificar
   estado da arte, divergências, agrupamentos e quadrantes vazios.
-argument-hint: [tema | questão]
+argument-hint: [tema | questão] [--projeto slug]
 ---
 
 # Geração de mapa conceitual
@@ -13,8 +13,12 @@ Você vai produzir um mapa do corpus sobre um tema. Protocolo:
 
 ## 1. Identificação do tipo de mapa
 
-Receber tema/questão em `$ARGUMENTS`. Identificar qual tipo de mapa é
-mais adequado:
+Identificar projeto ativo conforme hierarquia em CLAUDE.md (seção
+"Identificação do projeto ativo"): `--projeto [slug]` se fornecido em
+`$ARGUMENTS`, senão inferir por cwd, senão perguntar.
+
+Receber tema/questão em `$ARGUMENTS` (descontando `--projeto [slug]`
+se presente). Identificar qual tipo de mapa é mais adequado:
 
 - **Tipo A — Estado da arte**: usuário pergunta "qual o estado da arte
   sobre X?" ou "como o corpus trata X?"

@@ -3,7 +3,7 @@ description: Indexa um PDF do corpus invocando o subagente @leitor-profundo,
   que produz fichamento estruturado em corpus/indice/papers/ e atualiza os
   mapas derivados de conceitos e autores. Use quando precisar adicionar paper
   novo ao índice ou refichar paper existente com template atualizado.
-argument-hint: [caminho-do-pdf-relativo-ao-projeto]
+argument-hint: [caminho-do-pdf-relativo-ao-projeto] [--projeto slug]
 ---
 
 # Indexação de paper
@@ -12,8 +12,9 @@ Você vai indexar um PDF no projeto ativo. Protocolo:
 
 ## 1. Identificação do projeto e do arquivo
 
-1. Identificar o projeto ativo conforme regras do CLAUDE.md (diretório
-   atual, ou perguntar se ambíguo)
+1. Identificar o projeto ativo conforme hierarquia em CLAUDE.md (seção
+   "Identificação do projeto ativo"): `--projeto [slug]` se fornecido em
+   `$ARGUMENTS`, senão inferir por cwd, senão perguntar.
 2. Localizar o arquivo em `$ARGUMENTS`. Aceitar:
    - Caminho relativo ao projeto: `corpus/papers/ayres-1992.pdf`
    - Apenas nome do arquivo: `ayres-1992.pdf` (assume `corpus/papers/`)
