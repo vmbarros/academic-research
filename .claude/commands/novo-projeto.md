@@ -211,23 +211,29 @@ GROUP BY tipo
 *Atualizado automaticamente via Dataview conforme novos papers são indexados.*
 ```
 
-### Esqueletos em `corpus/indice/conceitos/[conceito].md`
+### Esqueletos em `corpus/indice/conceitos/[slug].md`
+
+Nome do arquivo: slug ASCII do conceito (regra de slug em
+`.claude/skills/indexacao-paper/SKILL.md`, seção "Geração de slugs ASCII").
 
 Para cada conceito-chave informado:
 
 ```markdown
 ---
-conceito: [nome do conceito]
+conceito: [nome do conceito como o usuário escreveu]
+slug: [slug ASCII]
+projeto: [slug do projeto]
 status: a-indexar
 papers_que_mobilizam: []
+papers_que_introduzem: []
+divergencias_semanticas: []
 ---
 
 # [Conceito]
 
 > [!note] A indexar
-> Este arquivo foi criado como esqueleto. Será preenchido conforme
-> papers do corpus que mobilizam o conceito forem indexados pelo
-> @leitor-profundo.
+> Este arquivo foi criado como esqueleto. Será preenchido conforme papers
+> do corpus que mobilizam o conceito forem indexados pelo @leitor-profundo.
 
 ## Definição operacional adotada no projeto
 
@@ -254,15 +260,19 @@ papers_que_mobilizam: []
 [a indexar]
 ```
 
-### Esqueletos em `corpus/indice/autores/[autor].md`
+### Esqueletos em `corpus/indice/autores/[slug].md`
 
-Para cada autor-âncora informado (slug do autor: sobrenome em
-minúsculas, sem acento):
+Nome do arquivo: slug ASCII do autor — usar `sobrenome-nome` quando há nome
+próprio, ou `sobrenome` quando o autor é tradicionalmente citado só pelo
+sobrenome no campo (regra de slug em `.claude/skills/indexacao-paper/SKILL.md`).
+
+Para cada autor-âncora informado:
 
 ```markdown
 ---
 autor: [Nome completo]
-slug: [sobrenome]
+slug: [slug ASCII, ex.: habermas-jurgen]
+projeto: [slug do projeto]
 obras_no_corpus: []
 papers_que_citam: []
 funcao_recorrente: a-definir
@@ -271,9 +281,8 @@ funcao_recorrente: a-definir
 # [Nome do autor]
 
 > [!note] A indexar
-> Este arquivo foi criado como esqueleto. Será preenchido conforme
-> papers do corpus que citam o autor forem indexados pelo
-> @leitor-profundo.
+> Este arquivo foi criado como esqueleto. Será preenchido conforme papers do
+> corpus que citam o autor forem indexados pelo @leitor-profundo.
 
 ## Identificação
 
@@ -293,8 +302,7 @@ funcao_recorrente: a-definir
 
 ## Divergências internas
 
-[a indexar — papers do corpus que usam este autor em sentidos
-incompatíveis]
+[a indexar — papers do corpus que usam este autor em sentidos incompatíveis]
 
 ## Genealogia
 

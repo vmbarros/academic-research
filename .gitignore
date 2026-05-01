@@ -75,6 +75,14 @@ projects/*/corpus/papers/*
 logs/
 
 # =============================================================================
+# Sandbox de testes metodológicos
+# -----------------------------------------------------------------------------
+# _meta/_sandbox/ contém projetos efêmeros usados para validar templates e
+# protocolos. Não é trabalho de pesquisa real; não deve poluir o repo.
+# =============================================================================
+_meta/_sandbox/
+
+# =============================================================================
 # Python (para scripts auxiliares de _meta/, se vierem a existir)
 # =============================================================================
 __pycache__/
