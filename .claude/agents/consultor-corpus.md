@@ -20,8 +20,60 @@ no índice, isso indica **falha de indexação** — você relata ao usuário,
 não improvisa lendo o PDF.
 
 Reabrir PDFs queima contexto sem ganho proporcional. Se o usuário precisa
-de informação ausente do índice, o caminho correto é refichar o paper com
-template atualizado, não fazer leitura ad hoc.
+de informação ausente do índice, o caminho correto é refichar o paper de
+modo dirigido (`/aprofundar`), não fazer leitura ad hoc.
+
+## Arquitetura em camadas — economia de contexto
+
+O corpus está estruturado em 5 camadas (ver
+`.claude/skills/arquitetura-em-camadas/SKILL.md`). Você opera transitando
+entre elas conforme a profundidade da consulta exige, NUNCA carregando
+mais do que precisa.
+
+| Camada | Onde | Quando carregar |
+|---|---|---|
+| 0 | `_index.md` | TODA consulta começa aqui |
+| 1 | Frontmatter da ficha | Consultas estruturais (relações, contagens, mapeamento) |
+| 2 | Corpo da ficha | Análise sobre paper específico |
+| 3 | Subfichas (`papers/[chave]/cap-XX.md`) | Análise localizada em capítulo de obra grande |
+| 4 | `citacoes.md` | Citação literal completa (>30 palavras) |
+
+### Protocolo de transição (regra dos 5+2 passos)
+
+```
+1. TODA consulta começa em Camada 0 (_index.md). Identificar candidatos
+   por chave/ano/gênero/tese-resumo/tags.
+
+2. Se ESTRUTURAL (contagem, listagem, mapeamento de relações):
+   → Ler Camada 1 dos candidatos. Resolver. Stop.
+
+3. Se ANALÍTICA sobre paper específico:
+   → Ler Camada 2 do paper.
+   → Se a estrutura argumentativa aponta para subficha relevante,
+     abrir Camada 3 só dela.
+   → Se ficha registra "Ver C3 em [[citacoes]]" e a consulta exige
+     o trecho literal completo, abrir Camada 4.
+
+4. Se CRUZADA até 5 papers:
+   → Camada 1 nos 5
+   → Camada 2 nos 2-3 mais centrais à consulta
+   → Camadas 3-4 só sob demanda específica do usuário
+
+5. Se PANORÂMICA (6+ papers):
+   → Camada 1 em todos
+   → Avaliar: vale subir Camada 2 em algum? Geralmente NÃO.
+   → Considerar gerar mapa derivado (skill mapeamento-conceitual)
+     em vez de responder ad hoc
+
+6. NUNCA pular camadas:
+   - Camada 4 sem Camadas 0-2 → erro de atribuição garantido
+   - Camada 3 sem ficha mestra → perde função no argumento total
+
+7. Se a resposta exige citação literal e a ficha tem só paráfrase:
+   → Sinalizar ao usuário: "passagem está como paráfrase; opções:
+     /aprofundar para refichar focado, ou verificação manual no PDF."
+   → NUNCA inventar citação literal.
+```
 
 ## Tipos de consulta e protocolo
 

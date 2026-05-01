@@ -66,15 +66,16 @@ projects/[slug]/
 ├── corpus/
 │   ├── papers/.gitkeep
 │   └── indice/
-│       ├── _master.md
+│       ├── _index.md             (Camada 0 — vazio inicialmente)
+│       ├── _master.md            (entrada navegável Dataview)
 │       ├── papers/.gitkeep
 │       ├── conceitos/
-│       │   ├── [conceito-1].md  (esqueleto)
-│       │   ├── [conceito-2].md
+│       │   ├── [slug-1].md       (esqueleto, nome = slug ASCII)
+│       │   ├── [slug-2].md
 │       │   └── ...
 │       ├── autores/
-│       │   ├── [autor-1].md     (esqueleto)
-│       │   ├── [autor-2].md
+│       │   ├── [slug-1].md       (esqueleto, nome = slug ASCII)
+│       │   ├── [slug-2].md
 │       │   └── ...
 │       └── mapas/.gitkeep
 ├── sessoes/.gitkeep
@@ -159,6 +160,24 @@ prazo: [prazo informado, ou "sem prazo"]
 
 ---
 *Documento vivo. Atualizar quando o foco do projeto mudar.*
+```
+
+### `corpus/indice/_index.md`
+
+Camada 0 da arquitetura (ver `.claude/skills/arquitetura-em-camadas/SKILL.md`).
+Mantido automaticamente pelo `@leitor-profundo`. Cabeçalho fixo:
+
+```markdown
+# Índice denso — [Título do projeto]
+
+> Gerado e mantido pelo `@leitor-profundo`. NÃO editar à mão — alterações são
+> sobrescritas na próxima indexação. Para refinar resumo de uma obra, editar
+> `tese_central_resumo` no frontmatter da ficha; será propagado.
+
+| chave | ano | gênero | tese (≤80 palavras) | tags | checksum |
+|---|---|---|---|---|---|
+
+*Sem entradas. Será preenchido conforme papers forem indexados.*
 ```
 
 ### `corpus/indice/_master.md`

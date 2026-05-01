@@ -182,16 +182,39 @@ criatividade ou aproximação.
 
 ## Fonte canônica do corpus (dentro de cada projeto)
 
-- `projects/[slug]/corpus/indice/_master.md` — entrada raiz do índice
-- `projects/[slug]/corpus/indice/papers/[chave].md` — fichas individuais
-- `projects/[slug]/corpus/indice/conceitos/[termo].md` — uso de cada conceito-chave
-- `projects/[slug]/corpus/indice/autores/[nome].md` — como cada autor é mobilizado
+- `projects/[slug]/corpus/indice/_index.md` — Camada 0, índice denso (1 linha por obra)
+- `projects/[slug]/corpus/indice/_master.md` — entrada navegável (queries Dataview)
+- `projects/[slug]/corpus/indice/papers/[chave].md` — ficha de paper único (Camadas 1-2)
+- `projects/[slug]/corpus/indice/papers/[chave]/_ficha.md` — ficha mestra de obra grande (Camadas 1-2)
+- `projects/[slug]/corpus/indice/papers/[chave]/cap-XX-titulo.md` — subfichas por capítulo (Camada 3)
+- `projects/[slug]/corpus/indice/papers/[chave]/citacoes.md` — anexo de citações expandidas (Camada 4)
+- `projects/[slug]/corpus/indice/conceitos/[slug].md` — uso de cada conceito-chave
+- `projects/[slug]/corpus/indice/autores/[slug].md` — como cada autor é mobilizado
 - `projects/[slug]/corpus/papers/` — PDFs originais (lidos APENAS via @leitor-profundo)
 - Zotero MCP — metadados canônicos (transversal aos projetos)
 
 Quando uma consulta pode ser respondida lendo o índice, leia o índice.
 NUNCA reabra PDFs originais para responder consultas — isso queima
 contexto sem ganho. PDFs são lidos uma vez, durante a indexação.
+
+## Arquitetura em camadas — princípio operacional
+
+O corpus indexado tem **5 camadas** de representação, cada uma para tipo
+distinto de consulta. O acesso é progressivo: o LLM transita entre camadas
+conforme a profundidade que a pergunta exige, em vez de carregar tudo a cada
+consulta.
+
+| Camada | Onde | Função |
+|---|---|---|
+| 0 | `_index.md` | Filtragem barata (1 linha por obra) |
+| 1 | Frontmatter YAML da ficha | Consultas estruturais (relações, contagens) |
+| 2 | Corpo da ficha em prosa | Análise sobre paper específico |
+| 3 | Subfichas por capítulo (`papers/[chave]/cap-XX.md`) | Análise localizada em obras 300+pp |
+| 4 | Anexo de citações expandidas (`citacoes.md`) | Citação literal >30 palavras |
+
+Definição completa, templates e protocolo de transição em
+`.claude/skills/arquitetura-em-camadas/SKILL.md`. **Ler essa skill antes de
+operar consulta complexa ou indexação de obra grande.**
 
 ## Workflow
 

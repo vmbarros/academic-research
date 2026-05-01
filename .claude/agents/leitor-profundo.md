@@ -100,15 +100,45 @@ Estrutura obrigatória de seções (em ordem fixa) definida em
 `indexacao-paper/SKILL.md`. Ecoar em prosa o que está no frontmatter (tese,
 pressupostos, registro epistêmico, conexões), justificando classificações.
 
-### 6. Salvamento
+### 6. Decisão sobre camadas (subfichas e anexo)
 
-Path de salvamento: `corpus/indice/papers/[chave].md` (paper único) ou
-`corpus/indice/papers/[chave]/_ficha.md` (livro/tese com subfichas).
+Antes de salvar, decidir a estrutura conforme regras em
+`.claude/skills/arquitetura-em-camadas/SKILL.md`:
 
-Verificar antes se já existe — se sim, perguntar ao orquestrador antes de
-sobrescrever (refichagem é decisão do usuário).
+- **Paper único, sem subfichas**: salva em `corpus/indice/papers/[chave].md`.
+  Aplicável a artigos, capítulos, papers até 80 pp.
+- **Obra grande com subfichas (Camada 3)**: criar diretório
+  `corpus/indice/papers/[chave]/` com:
+  - `_ficha.md` — ficha mestra (frontmatter + corpo de alto nível, com
+    estrutura argumentativa por capítulo linkando para subfichas)
+  - `cap-XX-slug.md` — uma subficha por capítulo (zero-padded: `cap-01`,
+    `cap-02`...; nunca romanos)
+  - `citacoes.md` (opcional) — anexo de citações expandidas (Camada 4)
 
-### 7. Bidirecionalidade — atualizar fichas citadas
+  Obrigatório para livros/teses 300+pp; recomendado para teses 100-300pp
+  com alta densidade conceitual.
+
+- **Anexo de citações expandidas (Camada 4)**: criar quando o paper tem
+  passagem-chave que excede 30 palavras OU quando o número de citações
+  literais dignas de registro excede o teto da ficha (5 para artigo, 10
+  para livro). Path:
+  - `corpus/indice/papers/[chave]/citacoes.md` (se obra com diretório)
+  - `corpus/indice/papers/[chave]-citacoes.md` (se obra com ficha única)
+
+  Citações no anexo são identificadas por `C1`, `C2`...; ficha mestra e
+  subfichas referenciam por id (`> Ver C3 em [[citacoes]]`).
+
+### 7. Salvamento
+
+Verificar antes se a ficha já existe no path decidido — se sim, perguntar
+ao orquestrador antes de sobrescrever (refichagem é decisão do usuário).
+
+Para obras com subfichas, salvar em ordem:
+1. `_ficha.md` (mestra) primeiro
+2. Subfichas `cap-XX-*.md` em sequência
+3. `citacoes.md` por último (se aplicável)
+
+### 8. Bidirecionalidade — atualizar fichas citadas
 
 Após salvar a ficha de X, para cada item Y em `X.relacoes.cita`:
 
@@ -137,7 +167,7 @@ Após salvar a ficha de X, para cada item Y em `X.relacoes.cita`:
    de que X foi finalmente indexado e essas pendências podem fechar — aplicar
    bidirecionalidade reversa.
 
-### 8. Atualização de esqueletos derivados
+### 9. Atualização de esqueletos derivados
 
 Após salvar a ficha:
 
@@ -153,7 +183,38 @@ Após salvar a ficha:
 3. Se Zotero MCP disponível: anexar a ficha como nota ao item correspondente
    no Zotero, para sincronização bidirecional.
 
-### 9. Aplicação dos checklists
+### 10. Atualização do `_index.md` (Camada 0)
+
+Ao final da indexação (após salvar ficha + subfichas + citacoes + atualizar
+esqueletos + bidirecionalidade), atualizar o índice denso do projeto.
+
+Path: `corpus/indice/_index.md`. Formato definido em
+`.claude/skills/arquitetura-em-camadas/SKILL.md`.
+
+Protocolo:
+
+1. Ler o `_index.md` atual (ou criar se não existir, com cabeçalho da skill)
+2. Procurar linha existente para `chave` da ficha indexada
+3. Calcular checksum: `sha256(conteudo_da_ficha_mestra)[:4]` (4 hex chars).
+   Para obra com subfichas, usar conteúdo de `_ficha.md`.
+4. Construir linha: `| chave | ano | gênero | tese (≤80 palavras) | tags | checksum |`
+   - Para `tese`: usar `tese_central_resumo`. Se `null` (obra politética), usar
+     primeira de `teses_centrais`. Se obra irredutível, usar `[obra de tese
+     irredutível — ver corpo e subfichas]`.
+   - Para `tags`: tema_central + 2-4 itens de campos/conceitos_introduzidos
+5. Inserir/substituir linha mantendo ordem alfabética por `chave` (diff git
+   estável)
+6. Salvar
+
+Snippet Python para checksum (executar via Bash quando preciso):
+
+```python
+import hashlib
+def checksum(path):
+    return hashlib.sha256(open(path, 'rb').read()).hexdigest()[:4]
+```
+
+### 11. Aplicação dos checklists
 
 Antes de declarar a ficha pronta:
 
@@ -178,6 +239,11 @@ Antes de declarar a ficha pronta:
   YAML reais (`- a\n- b\n- c`).
 - NUNCA pular geração de slug ASCII para autores e conceitos.
 - NUNCA pular bidirecionalidade — se ficha X cita Y e Y existe, atualizar Y.
+- NUNCA pular atualização do `_index.md` ao final.
+- NUNCA indexar livro 300+pp em ficha única (subfichas obrigatórias).
+- NUNCA numerar subfichas com algarismos romanos no nome de arquivo.
+- NUNCA editar `_index.md` por edição manual de linha — sempre via cálculo
+  completo (lê + computa nova linha + insere ordenadamente).
 - Se o PDF está corrompido, scaneado sem OCR, ou ininteligível em alguma parte:
   relatar explicitamente no campo `cobertura_incompleta`, não preencher buracos
   com inferência.
@@ -186,12 +252,15 @@ Antes de declarar a ficha pronta:
 
 Devolver ao agente principal APENAS:
 
-1. Caminho completo do arquivo de ficha gerado
-2. Tese central (cópia do `tese_central_resumo`, ou primeira de `teses_centrais`)
-3. 3-5 conceitos-chave do paper
-4. Lista de novos arquivos criados em `conceitos/` e `autores/`
-5. Lista de fichas atualizadas via bidirecionalidade
-6. Itens em `cobertura_incompleta` (se houver)
-7. Sinalizações de problemas encontrados (PDFs com issues, dados ausentes)
+1. Caminho completo do arquivo de ficha mestra gerado
+2. Lista de subfichas criadas (se obra com Camada 3)
+3. Caminho do anexo `citacoes.md` (se Camada 4 criada)
+4. Tese central (cópia do `tese_central_resumo`, ou primeira de `teses_centrais`)
+5. 3-5 conceitos-chave do paper
+6. Lista de novos arquivos criados em `conceitos/` e `autores/`
+7. Lista de fichas atualizadas via bidirecionalidade
+8. Linha adicionada/atualizada no `_index.md`
+9. Itens em `cobertura_incompleta` (se houver)
+10. Sinalizações de problemas encontrados (PDFs com issues, dados ausentes)
 
 A ficha completa fica no arquivo. Não duplicar conteúdo no canal de retorno.
